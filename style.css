@@ -1,0 +1,253 @@
+:root {
+  --red: #8b0000;
+  --red-2: #a30d0d;
+  --side: 200px;
+  --line: #e4e4e4;
+  --serif: "Times New Roman", Times, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+/* ---------- Page shell: one grid, nothing outside it scrolls ---------- */
+body {
+  margin: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  grid-template:
+    "header header" auto
+    "aside  main"   1fr
+    "aside  footer" auto
+    / min(var(--side), 45vw) minmax(0, 1fr);
+  font-family: var(--serif);
+  color: #111;
+  background: #fff;
+}
+
+/* ---------- Header ---------- */
+header {
+  grid-area: header;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0 1rem;
+  padding: .55rem 1rem;
+  background: var(--red);
+  color: #fff;
+}
+h1 {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin: 0;
+  font-size: 1.15rem;
+  white-space: nowrap;
+}
+h1 svg {
+  width: 30px; height: 30px; padding: 5px;
+  border-radius: 7px;
+  background: #fff;
+  color: var(--red);
+}
+.actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .25rem; }
+.actions button {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .35rem .6rem;
+  border: 0; border-radius: 6px;
+  background: none; color: #fff;
+  font: .8rem var(--sans);
+  cursor: pointer;
+}
+.actions button:hover { background: rgba(255,255,255,.14); }
+.actions svg { width: 14px; height: 14px; }
+
+#updates {
+  grid-column: 1 / -1;
+  margin: .3rem 0 0;
+  padding-inline-start: 2.6rem;
+  list-style: none;
+  font-size: .85rem;
+  line-height: 1.5;
+}
+#updates:empty { display: none; }
+#updates li { display: flex; align-items: center; gap: .5rem; }
+#updates button {
+  display: grid; place-items: center;
+  width: 16px; height: 16px; padding: 0;
+  border: 0; border-radius: 50%;
+  background: rgba(0,0,0,.3); color: #000;
+  font: bold 11px/1 var(--sans);
+  cursor: pointer;
+}
+#updates button:hover { background: rgba(0,0,0,.5); color: #fff; }
+
+/* ---------- Sidebar (resizable) ---------- */
+aside {
+  grid-area: aside;
+  position: relative;
+  display: flex;
+  min-height: 0;
+  background: #f3f3f3;
+  border-inline-end: 1px solid var(--line);
+}
+#menu { flex: 1; overflow: auto; padding: .5rem 0; }
+#menu a {
+  display: flex; align-items: center; gap: .65rem;
+  padding: .55rem 1rem;
+  color: #333; text-decoration: none;
+  font: .8rem var(--sans);
+  white-space: nowrap;
+}
+#menu a:hover, #menu a:focus-visible { background: #e5e5e5; outline: none; }
+#menu svg { width: 16px; height: 16px; flex: none; color: var(--c); }
+
+#resizer {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: -3px;
+  width: 6px;
+  cursor: col-resize;
+  z-index: 2;
+}
+#resizer:hover, body.resizing #resizer { background: rgba(139,0,0,.35); }
+body.resizing { cursor: col-resize; user-select: none; }
+
+/* ---------- Main (the only scrolling content area) ---------- */
+/* Hero stays fixed; only the article below it scrolls */
+main {
+  grid-area: main;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  container-type: inline-size;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: clamp(120px, 36vh, 340px);
+}
+.hero > * { position: relative; overflow: hidden; min-width: 0; }
+
+/* CSS animation panel: 4 shapes from pseudo-elements, no extra tags */
+.anim {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, var(--red-2), var(--red));
+}
+.anim span {
+  z-index: 1;
+  color: #fff;
+  font-size: clamp(1rem, 2.4cqi, 1.4rem);
+  font-weight: bold;
+  text-align: center;
+}
+.anim::before, .anim::after, .anim span::before, .anim span::after {
+  content: "";
+  position: absolute;
+  border-radius: 30%;
+  animation: drift 14s ease-in-out infinite alternate;
+}
+.anim::before {
+  width: 45%; aspect-ratio: 1; left: 18%; top: 25%;
+  border: 3px solid rgba(255,255,255,.22);
+}
+.anim::after {
+  width: 26%; aspect-ratio: 1; right: 8%; top: 18%;
+  background: rgba(255,255,255,.16);
+  animation-duration: 11s; animation-delay: -4s;
+}
+.anim span::before {
+  width: 18%; aspect-ratio: 1; left: 4%; bottom: 6%;
+  background: rgba(255,255,255,.12);
+  animation-name: drift2; animation-duration: 9s;
+}
+.anim span::after {
+  width: 10%; aspect-ratio: 1; right: 30%; top: 6%;
+  border: 2px solid rgba(255,255,255,.3);
+  animation-name: drift2; animation-duration: 7s; animation-delay: -3s;
+}
+@keyframes drift {
+  0%   { transform: translate(0, 0) rotate(0); opacity: .9; }
+  50%  { transform: translate(-12%, 15%) rotate(25deg) scale(1.1); opacity: .5; }
+  100% { transform: translate(10%, -8%) rotate(-15deg) scale(.85); opacity: 1; }
+}
+@keyframes drift2 {
+  0%   { transform: translate(0, 0) scale(.6); opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: translate(60%, -80%) scale(1.2) rotate(45deg); opacity: 0; }
+}
+
+#heart { background: #f3f3f3; cursor: grab; touch-action: none; }
+#heart:active { cursor: grabbing; }
+#heart canvas { display: block; width: 100%; height: 100%; }
+
+/* ---------- Article ---------- */
+article { overflow: auto; padding: 1rem 1.2rem 2.5rem; }
+article h2 { margin: 0 0 .6rem; font-size: 1.45rem; }
+article h3 { margin: 1.1rem 0 .6rem; font-size: 1.05rem; }
+article p { margin: 0; font-size: .85rem; line-height: 1.5; }
+article .lead { font-size: .95rem; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+.row p { flex: 1; min-width: min(11rem, 100%); }
+.badge {
+  flex: none;
+  display: grid; place-items: center;
+  width: 56px; height: 56px;
+  border-radius: 3px;
+  background: var(--c);
+  color: #fff;
+  font: bold 1.05rem var(--sans);
+}
+.badge.js { color: #222; }
+
+/* ---------- Footer: pinned under main, never under the sidebar ---------- */
+footer {
+  grid-area: footer;
+  position: relative;
+  padding: .55rem 1rem;
+  border-top: 1px solid var(--line);
+  background: #fff;
+  color: #555;
+  font-size: .75rem;
+  text-align: center;
+}
+
+/* Sits on the footer's top border, always on the physical right */
+#fab {
+  position: absolute;
+  top: 0;
+  right: 24px;
+  transform: translateY(-50%);
+  display: grid; place-items: center;
+  width: 44px; height: 44px;
+  border: 0; border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(139,0,0,.35);
+  cursor: pointer;
+  z-index: 5;
+  transition: transform .2s, background .2s, box-shadow .2s;
+}
+#fab:hover {
+  background: #c00000;
+  transform: translateY(calc(-50% - 3px)) scale(1.06);
+  box-shadow: 0 8px 18px rgba(139,0,0,.45);
+}
+#fab svg { width: 20px; height: 20px; }
+
+button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+#fab:focus-visible { outline-color: var(--red); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  header { grid-template-columns: 1fr; }
+  .actions { justify-content: flex-start; }
+  #menu a { padding: .55rem .8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim::before, .anim::after, .anim span::before, .anim span::after { animation: none; }
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grid Layout</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1><i data-lucide="graduation-cap"></i><span data-t="title"></span></h1>
+    <nav class="actions">
+      <button id="lang"><i data-lucide="globe"></i><span data-t="lang"></span></button>
+      <button id="add"><i data-lucide="plus"></i><span data-t="add"></span></button>
+      <button id="clear"><i data-lucide="trash-2"></i><span data-t="clear"></span></button>
+    </nav>
+    <ul id="updates"></ul>
+  </header>
+
+  <aside>
+    <nav id="menu"></nav>
+    <div id="resizer" title="Drag to resize"></div>
+  </aside>
+
+  <main>
+    <section class="hero">
+      <div class="anim"><span>CSS Animation</span></div>
+      <div id="heart"></div>
+    </section>
+    <article id="content"></article>
+  </main>
+
+  <footer>
+    <span>© 2026 Training 2026. All rights reserved.</span>
+    <button id="fab" aria-label="Add"><i data-lucide="plus"></i></button>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/DRACOLoader.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
